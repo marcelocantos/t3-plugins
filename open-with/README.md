@@ -16,7 +16,7 @@ It needs the plugin build of T3 Code with link activation (`"click": "activate"`
 
 T3 starts and stops the plugin itself; there is no server to keep running. Build it, put the
 binary somewhere stable, and add this entry to `panel-plugins.json` beside T3's `settings.json`
-(`~/.t3/userdata/` for the desktop app):
+(`~/.t3/userdata/` for the `upgrade` build, `~/.t3-plugins/userdata/` for T3 Code+):
 
 ```sh
 go build -o ~/.local/bin/t3-open-with .   # GOWORK=off if a parent go.work does not list this module
@@ -69,4 +69,4 @@ GOWORK=off go test -race ./...
 
 ## Licence
 
-Apache 2.0. See [LICENSE](LICENSE).
+Apache 2.0. See [LICENSE](../LICENSE).
