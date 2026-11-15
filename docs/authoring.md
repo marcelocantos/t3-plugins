@@ -155,8 +155,8 @@ skill (`.agents/skills/test-t3-app/SKILL.md` in the checkout):
    and threads when the source database is small enough (otherwise run `vp run migrate-dev-db`
    with the server stopped). Never point a dev server at `~/.t3/userdata`; that is the developer's live install.
 2. Register the plugin in the dev home: write the entry into `<worktree>/.t3/userdata/panel-plugins.json`,
-   with `command` pointing at a binary you built (an absolute path). Close and reopen the sidebar so
-   T3 reads the file. A discovered server plugin instead writes its manifest and is enabled in
+   with `command` pointing at a binary you built (an absolute path). T3 picks the file up within ten
+   seconds while a client is connected. A discovered server plugin instead writes its manifest and is enabled in
    **Settings → Plugins**; note that the manifest directory is shared by every T3 on the machine.
 3. Put a link or row in front of the plugin without paying for a model: the free `Replay (dev)`
    provider that `vp run dev` registers replays recorded turns, and an existing seeded thread may
