@@ -12,7 +12,28 @@ T3's own behaviour.
 It needs the plugin build of T3 Code with link activation (`"click": "activate"`, see
 [panel plugins](https://github.com/marcelocantos/t3code/blob/main/docs/operations/panel-plugins.md#taking-a-link-over)).
 
-## Run it
+## Install as a sidecar (recommended)
+
+T3 starts and stops the plugin itself. Build it, put the binary somewhere stable, and add this
+entry to `panel-plugins.json` beside T3's `settings.json` (`~/.t3/userdata/` for the desktop app):
+
+```json
+[
+  {
+    "id": "github.com/marcelocantos/t3-open-with",
+    "connection": { "kind": "sidecar", "command": "/Users/you/.local/bin/t3-open-with", "args": ["--sidecar"] },
+    "scopes": ["links"],
+    "links": [
+      { "id": "markdown", "glob": "/**/*.{md,markdown}", "click": "activate", "card": false }
+    ]
+  }
+]
+```
+
+With `--sidecar` the plugin listens on a free loopback port, prints T3's readiness record on
+stdout and does not advertise itself. No service manager is involved.
+
+## Run it as a standalone server
 
 ```sh
 go build -o t3-open-with .   # GOWORK=off if a parent go.work does not list this module
@@ -44,8 +65,6 @@ To register it by hand instead (for example with `--no-advertise`), add an entry
 ]
 ```
 
-To keep it running, start it from your service manager of choice (launchd, supervisord) with a
-fixed `--port`.
 
 ## How it decides
 

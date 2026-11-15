@@ -27,9 +27,12 @@ var version = "dev"
 const usage = `t3-open-with: open Markdown file links from T3 Code with the default application.
 
 Usage:
+  t3-open-with --sidecar
   t3-open-with [--port N] [--no-advertise]
 
 Flags:
+  --sidecar        Run as a T3-managed sidecar: listen on a free port, print the readiness
+                   record on stdout and do not advertise.
   --port N         Listen on 127.0.0.1:N (default 0, a free port).
   --no-advertise   Do not write a discovery manifest; register the endpoint by hand instead.
   --version        Print the version and exit.
@@ -60,6 +63,7 @@ Agent guide:
 func main() {
 	port := flag.Int("port", 0, "")
 	noAdvertise := flag.Bool("no-advertise", false, "")
+	sidecar := flag.Bool("sidecar", false, "")
 	showVersion := flag.Bool("version", false, "")
 	helpAgent := flag.Bool("help-agent", false, "")
 	flag.Usage = func() { fmt.Print(usage) }
@@ -72,12 +76,15 @@ func main() {
 		fmt.Print(usage + agentGuide)
 		return
 	}
-	if err := run(*port, !*noAdvertise); err != nil {
+	if *sidecar {
+		*port, *noAdvertise = 0, true
+	}
+	if err := run(*port, !*noAdvertise, *sidecar); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func run(port int, advertise bool) error {
+func run(port int, advertise, sidecar bool) error {
 	listener, err := net.Listen("tcp", net.JoinHostPort("127.0.0.1", strconv.Itoa(port)))
 	if err != nil {
 		return err
@@ -91,6 +98,10 @@ func run(port int, advertise bool) error {
 	served := make(chan error, 1)
 	go func() { served <- server.Serve(listener) }()
 	log.Printf("t3-open-with %s listening on %s", version, baseURL)
+	if sidecar {
+		// T3 reads this one line from stdout to learn the randomly allocated port.
+		fmt.Printf("{\"type\":\"ready\",\"protocol\":1,\"url\":\"ws://127.0.0.1:%d%s\"}\n", actual, endpointPath)
+	}
 
 	if advertise {
 		ad, err := Advertise(baseURL, strconv.Itoa(actual))
