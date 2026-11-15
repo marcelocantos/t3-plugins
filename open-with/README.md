@@ -12,51 +12,21 @@ T3's own behaviour.
 It needs the plugin build of T3 Code with link activation (`"click": "activate"`, see
 [panel plugins](https://github.com/marcelocantos/t3code/blob/main/docs/operations/panel-plugins.md#taking-a-link-over)).
 
-## Install as a sidecar (recommended)
+## Install
 
-T3 starts and stops the plugin itself. Build it, put the binary somewhere stable, and add this
-entry to `panel-plugins.json` beside T3's `settings.json` (`~/.t3/userdata/` for the desktop app):
-
-```json
-[
-  {
-    "id": "github.com/marcelocantos/t3-open-with",
-    "connection": { "kind": "sidecar", "command": "/Users/you/.local/bin/t3-open-with", "args": ["--sidecar"] },
-    "scopes": ["links"],
-    "links": [
-      { "id": "markdown", "glob": "/**/*.{md,markdown}", "click": "activate", "card": false }
-    ]
-  }
-]
-```
-
-With `--sidecar` the plugin listens on a free loopback port, prints T3's readiness record on
-stdout and does not advertise itself. No service manager is involved.
-
-## Run it as a standalone server
+T3 starts and stops the plugin itself; there is no server to keep running. Build it, put the
+binary somewhere stable, and add this entry to `panel-plugins.json` beside T3's `settings.json`
+(`~/.t3/userdata/` for the desktop app):
 
 ```sh
-go build -o t3-open-with .   # GOWORK=off if a parent go.work does not list this module
-./t3-open-with
+go build -o ~/.local/bin/t3-open-with .   # GOWORK=off if a parent go.work does not list this module
 ```
-
-It listens on `127.0.0.1` on a free port (`--port N` to choose one) and advertises itself by writing
-`$XDG_DATA_HOME/t3code/plugins/github.com+marcelocantos+t3-open-with+<port>.json`
-(`~/.local/share/t3code/plugins/` when `XDG_DATA_HOME` is unset). The file is removed when the
-plugin stops on SIGINT or SIGTERM. Run it as the same user as T3.
-
-Then open **Settings → Plugins** in T3, select **Open with default app** and choose **Enable
-selected**. T3 connects only after you enable it. If the plugin restarts on another port, T3 asks
-before switching; use a fixed `--port` to avoid that.
-
-To register it by hand instead (for example with `--no-advertise`), add an entry to
-`panel-plugins.json` beside T3's `settings.json`:
 
 ```json
 [
   {
     "id": "github.com/marcelocantos/t3-open-with",
-    "connection": { "kind": "server", "baseUrl": "http://127.0.0.1:47811/t3" },
+    "connection": { "kind": "sidecar", "command": "/Users/you/.local/bin/t3-open-with", "args": [] },
     "scopes": ["links"],
     "links": [
       { "id": "markdown", "glob": "/**/*.{md,markdown}", "click": "activate", "card": false }
@@ -65,6 +35,8 @@ To register it by hand instead (for example with `--no-advertise`), add an entry
 ]
 ```
 
+T3 runs the binary, which listens on a free loopback port and prints T3's readiness record on
+stdout. T3 stops it with SIGTERM when nothing needs it.
 
 ## How it decides
 
