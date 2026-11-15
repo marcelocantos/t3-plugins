@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	pluginID   = "github.com/marcelocantos/t3-open-with"
+	pluginID   = "github.com/marcelocantos/t3-plugins/open-with"
 	pluginName = "Open with default app"
 	// endpointPath serves both the discovery probe (plain GET) and the protocol (WebSocket).
 	endpointPath = "/t3"

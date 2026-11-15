@@ -1,4 +1,4 @@
-# t3-open-with
+# open-with
 
 A [T3 Code](https://github.com/marcelocantos/t3code) link plugin. A plain click on a Markdown file
 link in a chat opens the file with the application your machine registers for it, such as Vellum
@@ -25,7 +25,7 @@ go build -o ~/.local/bin/t3-open-with .   # GOWORK=off if a parent go.work does 
 ```json
 [
   {
-    "id": "github.com/marcelocantos/t3-open-with",
+    "id": "github.com/marcelocantos/t3-plugins/open-with",
     "connection": { "kind": "sidecar", "command": "/Users/you/.local/bin/t3-open-with", "args": [] },
     "scopes": ["links"],
     "links": [

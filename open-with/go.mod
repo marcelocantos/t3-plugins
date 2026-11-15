@@ -1,4 +1,4 @@
-module github.com/marcelocantos/t3-open-with
+module github.com/marcelocantos/t3-plugins/open-with
 
 go 1.24
 
