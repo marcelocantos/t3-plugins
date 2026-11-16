@@ -24,6 +24,9 @@ What a plugin can contribute:
   and see every project of the environment. See
   [protocol version 1](https://github.com/marcelocantos/t3code/blob/main/docs/operations/panel-plugins.md#protocol-version-1)
   and [environment panels](https://github.com/marcelocantos/t3code/blob/main/docs/operations/panel-plugins.md#row-actions-surfaces-and-environment-panels).
+  A thread panel that does the job of a built-in thread details item says so with
+  `"supersedes": ["usage"]` rather than asking T3 to change; T3 hides the item only while the
+  panel is shown, and the user can keep it (spec, *Protocol version 1*).
 - **Structured surfaces.** Rows, badges, actions, hover cards and dialogs that T3 renders from
   data. The plugin never supplies executable UI to T3's page. Prefer these; they work everywhere
   and need only `orchestration:read` to view.
